@@ -20,10 +20,18 @@ namespace huffman {
 
     class Encoder {
         private:
+            uint32_t freq_table[256] = {0};
             std::shared_ptr<Node> root;
             std::unordered_map<uint8_t, std::string> code_table;
+            uint8_t pad_bits;
+            uint64_t org_length;
+
             void buildHuffTree(const std::vector<uint8_t>& text);
-            void Encoder::dfsHuffTree(const std::shared_ptr<Node> nd, std::string path);
+            void dfsHuffTree(const std::shared_ptr<Node> nd, std::string path);
+            std::vector<uint8_t> bitPack(const std::vector<uint8_t>& data);
+            void appendBits(std::vector<uint8_t>& payload, uint8_t& acc, uint8_t& n, const std::string& path);
+            void finalizeBits(std::vector<uint8_t>& payload, uint8_t& acc, uint8_t& n);
+            std::vector<uint8_t> createHeader();
         public:
 
             // Encodes string given based on Huffman's Algorithm into a Huffman Coding Tree.
