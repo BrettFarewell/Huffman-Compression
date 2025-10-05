@@ -10,7 +10,7 @@ namespace huffman {
             return a->freq < b->freq;
         }
     };
-    
+
     void Encoder::buildHuffTree(const std::string& text) {
         std::unordered_map<char, int> huff_map;
 
@@ -39,7 +39,7 @@ namespace huffman {
                 nd_p->right = nd_a;
             }
 
-            if (!prio_nodes.empty()) {
+            if (prio_nodes.empty()) {
                 Encoder::root = nd_p;
                 break;
             } else 
