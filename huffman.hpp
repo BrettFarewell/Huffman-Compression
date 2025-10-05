@@ -1,13 +1,14 @@
 #pragma once
 
 #include <memory>
-#include <string>
+#include <cstdint>
+#include <vector>
 
 namespace huffman {
 
     // Node of a Hoffman Coding Tree
     struct Node {
-        char symbol;
+        uint8_t symbol;
         int freq;
         std::shared_ptr<Node> left = nullptr;
         std::shared_ptr<Node> right = nullptr;
@@ -18,12 +19,13 @@ namespace huffman {
     class Encoder {
         private:
             std::shared_ptr<Node> root;
-            void buildHuffTree(const std::string& text);
+            void buildHuffTree(const std::vector<uint8_t>& text);
+            std::vector<uint8_t> write(const std::vector<uint8_t>& text);
         public:
 
             // Encodes string given based on Huffman's Algorithm into a Huffman Coding Tree.
             // Stores root of resulting binary tree in private root.
-            std::string encode(const std::string& text);
+            std::vector<uint8_t> encode(const std::vector<uint8_t>& text);
     };
 
     class Decoder {
@@ -32,6 +34,6 @@ namespace huffman {
         public:
 
             // Decodes string based on Huffman's Algorithm from a Huffman Coding Tree.
-            std::string decode(const std::string& text);
+            std::vector<uint8_t> decode(const std::vector<uint8_t>& text);
     };
 }

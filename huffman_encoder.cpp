@@ -1,6 +1,7 @@
 #include "huffman.hpp"
 #include <unordered_map>
 #include <queue>
+#include <cstdint>
 #include <vector>
 
 namespace huffman {
@@ -11,7 +12,7 @@ namespace huffman {
         }
     };
 
-    void Encoder::buildHuffTree(const std::string& text) {
+    void Encoder::buildHuffTree(const std::vector<uint8_t>& text) {
         std::unordered_map<char, int> huff_map;
 
         for (char c: text)
@@ -47,9 +48,14 @@ namespace huffman {
         }
     }
 
-    std::string Encoder::encode(const std::string& text) {
+    std::vector<uint8_t> Encoder::encode(const std::vector<uint8_t>& text) {
         Encoder::buildHuffTree(text);
-        return ""; // stub
+        Encoder::write(text);
+        return std::vector<uint8_t>(); // stub
+    }
+
+    std::vector<uint8_t> Encoder::write(const std::vector<uint8_t>& text) {
+        return std::vector<uint8_t>(); // stub
     }
 }
 
