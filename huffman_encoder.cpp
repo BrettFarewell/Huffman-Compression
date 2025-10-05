@@ -12,10 +12,10 @@ namespace huffman {
         }
     };
 
-    void Encoder::buildHuffTree(const std::vector<uint8_t>& text) {
+    void Encoder::buildHuffTree(const std::vector<uint8_t>& data) {
         std::unordered_map<char, int> huff_map;
 
-        for (char c: text)
+        for (char c: data)
             ++huff_map[c];
 
         std::priority_queue<std::shared_ptr<Node>, std::vector<std::shared_ptr<Node>>, Comparator> prio_nodes;
@@ -41,21 +41,27 @@ namespace huffman {
             }
 
             if (prio_nodes.empty()) {
-                Encoder::root = nd_p;
+                root = nd_p;
                 break;
             } else 
                 prio_nodes.push(nd_p);
         }
     }
 
-    std::vector<uint8_t> Encoder::encode(const std::vector<uint8_t>& text) {
-        Encoder::buildHuffTree(text);
-        Encoder::write(text);
+    std::vector<uint8_t> Encoder::encode(const std::vector<uint8_t>& data) {
+        Encoder::buildHuffTree(data);
+        Encoder::dfsHuffTree(root, "");
         return std::vector<uint8_t>(); // stub
     }
 
-    std::vector<uint8_t> Encoder::write(const std::vector<uint8_t>& text) {
-        return std::vector<uint8_t>(); // stub
+    void Encoder::dfsHuffTree(const std::shared_ptr<Node> nd, std::string path) {
+        if (!nd) return;
+        if (!nd->left && !nd->right) {
+            code_table[nd->symbol] = (path.empty()) ? "0": path;
+            return;
+        }
+        dfsHuffTree(nd->left, path + "0");
+        dfsHuffTree(nd->right, path + "1");
     }
 }
 

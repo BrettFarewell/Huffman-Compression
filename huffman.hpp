@@ -1,7 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <unordered_map>
 #include <cstdint>
+#include <queue>
 #include <vector>
 
 namespace huffman {
@@ -19,8 +21,9 @@ namespace huffman {
     class Encoder {
         private:
             std::shared_ptr<Node> root;
+            std::unordered_map<uint8_t, std::string> code_table;
             void buildHuffTree(const std::vector<uint8_t>& text);
-            std::vector<uint8_t> write(const std::vector<uint8_t>& text);
+            void Encoder::dfsHuffTree(const std::shared_ptr<Node> nd, std::string path);
         public:
 
             // Encodes string given based on Huffman's Algorithm into a Huffman Coding Tree.
