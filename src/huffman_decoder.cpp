@@ -60,7 +60,7 @@ namespace huffman {
 
         std::string ver = "";
 
-        uint32_t i;
+        uint64_t i;
         
         // Decode version name + number (4 Bytes)
         for (i = 0; i < 4; ++i) 
