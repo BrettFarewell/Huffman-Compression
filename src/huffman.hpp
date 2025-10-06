@@ -11,11 +11,17 @@ namespace huffman {
     // Node of a Hoffman Coding Tree
     struct Node {
         uint8_t symbol;
-        int freq;
+        uint32_t freq;
         std::shared_ptr<Node> left = nullptr;
         std::shared_ptr<Node> right = nullptr;
         Node(int init_freq) {freq = init_freq;}
         Node(char init_symbol, int init_freq) {symbol = init_symbol; freq = init_freq;}
+    };
+
+    struct Comparator {
+        bool operator()(const std::shared_ptr<Node>& a, const std::shared_ptr<Node>& b) {
+            return a->freq > b->freq;
+        }
     };
 
     class Encoder {
@@ -41,10 +47,18 @@ namespace huffman {
 
     class Decoder {
         private:
+            uint32_t freq_table[256] = {0};
             std::shared_ptr<Node> root;
+            uint8_t pad_bits;
+            uint64_t org_length;
+
+            std::vector<uint8_t> deconstructHeader(const std::vector<uint8_t>& data, std::vector<uint8_t>& payload);
+            void reconHuffTree();
+            std::vector<uint8_t> decodePayload(const std::vector<uint8_t>& payload);
+            void decodeBit(std::vector<uint8_t>& decom_file, uint8_t bit, std::shared_ptr<Node>& nd);
         public:
 
             // Decodes string based on Huffman's Algorithm from a Huffman Coding Tree.
-            std::vector<uint8_t> decode(const std::vector<uint8_t>& text);
+            std::vector<uint8_t> decode(const std::vector<uint8_t>& data);
     };
 }

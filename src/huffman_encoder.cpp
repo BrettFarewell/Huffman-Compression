@@ -6,14 +6,8 @@
 
 namespace huffman {
 
-    struct Comparator {
-        bool operator()(const std::shared_ptr<Node>& a, const std::shared_ptr<Node>& b) {
-            return a->freq < b->freq;
-        }
-    };
-
     void Encoder::buildHuffTree(const std::vector<uint8_t>& data) {
-        std::unordered_map<uint8_t, int> huff_map;
+        std::unordered_map<uint8_t, uint32_t> huff_map;
 
         for (uint8_t b: data)
             ++huff_map[b];
@@ -25,7 +19,7 @@ namespace huffman {
             prio_nodes.push(std::make_shared<Node>(p.first, p.second));
         }
         
-        while(!prio_nodes.empty()) {
+        while(prio_nodes.size() > 1) {
             std::shared_ptr<Node> nd_a = prio_nodes.top();
             prio_nodes.pop();
 
@@ -34,7 +28,7 @@ namespace huffman {
 
             std::shared_ptr<Node> nd_p = std::make_shared<Node>(nd_a->freq + nd_b->freq);
 
-            if (nd_a->freq <= nd_b->freq) {
+            if (nd_a->freq < nd_b->freq) {
                 nd_p->left = nd_a;
                 nd_p->right = nd_b;
             } else {
@@ -47,6 +41,11 @@ namespace huffman {
                 break;
             } else 
                 prio_nodes.push(nd_p);
+        }
+
+        if (!root) {
+            root = prio_nodes.top();
+            prio_nodes.pop();
         }
     }
 
@@ -96,7 +95,7 @@ namespace huffman {
             ++n;
             if (n == 8) {
                 payload.push_back(acc);
-                n == 0;
+                n = 0;
                 acc = 0;
             }
         }
@@ -125,9 +124,9 @@ namespace huffman {
 
         // Input org_length -> little-endian (8 bytes)
         for (int i = 0; i < 8; ++i) 
-            header.push_back((uint8_t) org_length >> i * 8);
+            header.push_back((uint8_t) (org_length >> i * 8));
         
-        // Input frequencies
+        // Input frequencies (1024 Bytes)
         for (uint32_t f: freq_table) 
             for (uint8_t i = 0; i < 4; ++i) 
                 header.push_back((uint8_t) f >> i * 8);

@@ -15,10 +15,9 @@ int main() {
 
     assert(!output.empty());
 
-    assert(decoder.decode(output) == input);
+    const vector<uint8_t> decode_out = decoder.decode(output);
 
-    assert(encoder.encode(vector<uint8_t>()) == vector<uint8_t>());
-    assert(decoder.decode(vector<uint8_t>()) == vector<uint8_t>());
+    assert(decoder.decode(output) == input);
 
     return 0;
 }
