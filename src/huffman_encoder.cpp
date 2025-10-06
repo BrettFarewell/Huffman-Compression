@@ -1,5 +1,5 @@
 #include "huffman.hpp"
-#include <unordered_map>
+#include <map>
 #include <queue>
 #include <cstdint>
 #include <vector>
@@ -7,7 +7,7 @@
 namespace huffman {
 
     void Encoder::buildHuffTree(const std::vector<uint8_t>& data) {
-        std::unordered_map<uint8_t, uint32_t> huff_map;
+        std::map<uint8_t, uint32_t> huff_map;
 
         for (uint8_t b: data)
             ++huff_map[b];
@@ -129,7 +129,7 @@ namespace huffman {
         // Input frequencies (1024 Bytes)
         for (uint32_t f: freq_table) 
             for (uint8_t i = 0; i < 4; ++i) 
-                header.push_back((uint8_t) f >> i * 8);
+                header.push_back((uint8_t) (f >> i * 8));
 
         return header;
     }
