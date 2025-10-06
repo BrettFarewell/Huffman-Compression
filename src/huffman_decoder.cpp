@@ -112,6 +112,7 @@ namespace huffman {
 
         if (nd) 
             nd = root;
+        
         return decom_file;
     }
 
